@@ -24,21 +24,44 @@
     <div class="container bg-dark p-3">
         <h1 class="text-light text-center table-hover">Product Crud</h1>
         <!-- Button trigger modal -->
-        <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            +Add
-        </button>
-        <table class="table table-danger">
+        <div class="d-flex justify-content-between">
+
+            <button type="submit" class="btn btn-primary" id="btn-open-add" data-bs-toggle="modal"
+                data-bs-target="#exampleModal">
+                +Add
+            </button>
+            <form action="" class="d-flex">
+                <input type="text" class="form-control border-0 shadow-none " placeholder="Search...">
+                <button type="submit" class="btn btn-success border-0" id="btn-open-add" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal">
+                    Search
+                </button>
+            </form>
+
+
+
+        </div>
+        <table class="table table-dark p-3">
             <tr>
                 <th>Code</th>
                 <th>Name</th>
                 <th>Type</th>
-                <th>Quantity</th>
-                <th>Price</th>
+                <th class="pe-4">Quantity</th>
+                <th class="pe-5">Price</th>
                 <th>Action</th>
             </tr>
             <?php
             getProduct(); ?>
         </table>
+        <div class="text-light">
+            <ul class="d-flex ">
+                <li class="nav-link py-3 rounded-3 px-4 me-3 bg-success"><a href=""
+                        class="text-decoration-none text-light">1</a>
+                </li>
+                <li class="nav-link py-3 rounded-3 px-4 bg-success"><a href=""
+                        class="text-decoration-none text-light">2</a></li>
+            </ul>
+        </div>
     </div>
 
 </body>
@@ -55,15 +78,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+
                 <form action="" method="post">
+                    <!-- use if for show index code -->
+                    <input type="hidden" name="updateCode" id="updateCode_txt">
+
                     <div class="row">
                         <div class="col-12">
                             <label for=""><b>Product Name</b></label>
-                            <input type="text" name="pro_name" class="mt-2 form-control" placeholder="Product Name">
+                            <input type="text" name="pro_name" id="pro_name_txt" class="mt-2 form-control"
+                                placeholder="Product Name">
                         </div>
                         <div class="col-12 mt-3">
                             <label for=""><b>Product Type</b></label><br>
-                            <select name="pro_type" id="" class="mt-2 col-12">
+                            <select name="pro_type" id="pro_type_txt" class="mt-2 col-12">
                                 <option value="SelectType" disabled selected>Select Type</option>
                                 <option value="Drinks">Drinks</option>
                                 <option value="Food">Food</option>
@@ -71,16 +99,19 @@
                         </div>
                         <div class="col-12 mt-3">
                             <label for=""><b>Product Quantity</b></label>
-                            <input type="text" name="pro_qty" class="form-control mt-2" placeholder="Product Quantity">
+                            <input type="text" name="pro_qty" id="pro_qty_txt" class="form-control mt-2"
+                                placeholder="Product Quantity">
                         </div>
                         <div class="col-12 mt-3">
                             <label for=""><b>Product Price</b></label>
-                            <input type="text" name="pro_price" class="form-control" placeholder="Product Price">
+                            <input type="text" id="pro_price_txt" name="pro_price" class="form-control"
+                                placeholder="Product Price">
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" name="btn-save">Save </button>
+                        <button type="submit" class="btn btn-primary" id="btn-save" name="btn-save">Save </button>
+                        <button type="submit" class="btn btn-warning" id="btn-update" name="btn-update">Update </button>
                     </div>
                 </form>
             </div>
@@ -88,5 +119,42 @@
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function() {
+    $('#btn-open-add').click(function() {
+        $('#btn-update').addClass('d-none');
+        $('#btn-save').removeClass('d-none');
+
+        $('#pro_name_txt').val('');
+        //.val(take it from table database not name="pro_name" u put in html)
+        $('#pro_type_txt').val('');
+        $('#pro_qty_txt').val('');
+        $('#pro_price_txt').val('');
+
+        $('.modal-title').text("Insert Product");
+    })
+    $('body').on('click', '#btn-open-update', function() {
+        //when click on ('body') where it have update it will run(parent of btn)
+        $('#btn-save').addClass('d-none');
+        $('#btn-update').removeClass('d-none');
+        var row = $(this).parents('tr'); //(this) is the btn update
+        console.log(row);
+        var code = $(this).parents('tr').find('td').eq(0).text(); //eq is index
+        // console.log(code);
+        var name = $(this).parents('tr').find('td').eq(1).text();
+        var type = $(this).parents('tr').find('td').eq(2).text();
+        var qty = $(this).parents('tr').find('td').eq(3).text();
+        var price = $(this).parents('tr').find('td').eq(4).text();
+
+        $('#updateCode_txt').val(code);
+        $('#pro_name_txt').val(name);
+        $('#pro_type_txt').val(type);
+        $('#pro_qty_txt').val(qty);
+        $('#pro_price_txt').val(price);
+
+        $('.modal-title').text("Update Product");
+    })
+})
+</script>
 
 </html>
